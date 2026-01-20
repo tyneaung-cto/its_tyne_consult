@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "430294928328",
+    "project_id": "its-tyne-consult",
+    "storage_bucket": "its-tyne-consult.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430294928328:android:59eb2699dad4ce56c28efd",
+        "android_client_info": {
+          "package_name": "com.tech4mm.its_tyne_consult"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZMj_k6Awn05X2pUdTkywj_iO6HVtalPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
