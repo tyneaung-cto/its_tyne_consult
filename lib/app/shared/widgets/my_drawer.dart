@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:its_tyne_consult/app/core/constants/app_constants.dart';
 import 'package:its_tyne_consult/app/core/services/auth_service.dart';
 import 'package:its_tyne_consult/app/core/values/app_spacing.dart';
+import 'package:its_tyne_consult/app/modules/profile/controllers/profile_controller.dart';
 import 'package:its_tyne_consult/app/shared/widgets/drawer_list_tile.dart';
 import 'package:its_tyne_consult/app/shared/widgets/my_divider.dart';
 
@@ -14,6 +15,8 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+  final ProfileController profileController = Get.find<ProfileController>();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -31,24 +34,48 @@ class _MyDrawerState extends State<MyDrawer> {
                   child: Column(
                     children: [
                       // user avatar
-                      AuthService().getCurrentAvatar() != ''
-                          ? CircleAvatar(
-                              radius: 40,
-                              backgroundImage: NetworkImage(
-                                AuthService().getCurrentAvatar(),
-                              ),
-                            )
-                          : CircleAvatar(
-                              radius: 40,
-                              backgroundColor: Theme.of(
-                                context,
-                              ).colorScheme.onPrimary.withOpacity(0.2),
-                              child: Icon(
-                                Icons.person,
-                                size: 80,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
+                      // AuthService().getCurrentAvatar() != ''
+                      //     ? CircleAvatar(
+                      //         radius: 40,
+                      //         backgroundImage: NetworkImage(
+                      //           AuthService().getCurrentAvatar(),
+                      //         ),
+                      //       )
+                      //     : CircleAvatar(
+                      //         radius: 40,
+                      //         backgroundColor: Theme.of(
+                      //           context,
+                      //         ).colorScheme.onPrimary.withOpacity(0.2),
+                      //         child: Icon(
+                      //           Icons.person,
+                      //           size: 80,
+                      //           color: Theme.of(context).colorScheme.onPrimary,
+                      //         ),
+                      //       ),
+                      Obx(() {
+                        final imageUrl = profileController.profileImage.value;
+
+                        if (imageUrl!.isNotEmpty) {
+                          return CircleAvatar(
+                            radius: 40,
+                            backgroundImage: NetworkImage(imageUrl),
+                            backgroundColor: Colors.transparent,
+                          );
+                        }
+
+                        return CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .onPrimary
+                              .withValues(alpha: 0.2), // replaces withOpacity
+                          child: Icon(
+                            Icons.person,
+                            size: 48,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        );
+                      }),
                       AppSpacing.h12,
 
                       // user name

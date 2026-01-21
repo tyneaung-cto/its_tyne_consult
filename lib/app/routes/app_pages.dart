@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/auth-gate/bindings/auth_gate_binding.dart';
 import '../modules/auth-gate/views/auth_gate_view.dart';
+import '../modules/booking-list/bindings/booking_list_binding.dart';
+import '../modules/booking-list/views/booking_list_view.dart';
 import '../modules/booking/bindings/booking_binding.dart';
 import '../modules/booking/views/booking_view.dart';
 import '../modules/forget-password/bindings/forget_password_binding.dart';
@@ -92,6 +94,11 @@ class AppPages {
       name: _Paths.TERMS_AND_CONDITIONS,
       page: () => const TermsAndConditionsView(),
       binding: TermsAndConditionsBinding(),
+    ),
+    GetPage(
+      name: _Paths.BOOKING_LIST,
+      page: () => const BookingListView(),
+      binding: BookingListBinding(),
     ),
   ];
 }

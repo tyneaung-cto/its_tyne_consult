@@ -9,28 +9,6 @@ class NotificationsView extends GetView<NotificationsController> {
 
   @override
   Widget build(BuildContext context) {
-    final notifications = [
-      {
-        'title': 'Consultation Confirmed',
-        'message':
-            'Your consultation session has been confirmed. Please check the schedule.',
-        'time': 'Just now',
-        'icon': Icons.check_circle,
-      },
-      {
-        'title': 'Upcoming Session Reminder',
-        'message': 'You have a consultation session tomorrow at 10:00 AM.',
-        'time': '2 hours ago',
-        'icon': Icons.schedule,
-      },
-      {
-        'title': 'New Message',
-        'message': 'You received a message from ItsTyne Consult support.',
-        'time': 'Yesterday',
-        'icon': Icons.message,
-      },
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,55 +17,95 @@ class NotificationsView extends GetView<NotificationsController> {
         ),
         centerTitle: true,
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: notifications.length,
-        separatorBuilder: (_, __) => AppSpacing.h12,
-        itemBuilder: (context, index) {
-          final item = notifications[index];
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          return Card(
-            child: ListTile(
-              // leading: Icon(
-              //   item['icon'] as IconData,
-              //   color: Theme.of(context).colorScheme.primary,
-              // ),
-              leading: CircleAvatar(
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                child: Icon(
-                  item['icon'] as IconData,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+        if (controller.notifications.isEmpty) {
+          return const Center(child: Text('No notifications yet'));
+        }
+
+        return ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: controller.notifications.length,
+          separatorBuilder: (_, __) => AppSpacing.h12,
+          itemBuilder: (context, index) {
+            final noti = controller.notifications[index];
+
+            return Card(
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
+                  child: Icon(
+                    noti.isRead
+                        ? Icons.notifications
+                        : Icons.notifications_active,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
                 ),
-              ),
-              title: Text(
-                item['title'] as String,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppSpacing.h4,
-                  Text(
-                    item['message'] as String,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                title: Text(
+                  noti.title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppSpacing.h4,
+                    Text(
+                      noti.message,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                  AppSpacing.h8,
-                  Text(
-                    item['time'] as String,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    AppSpacing.h8,
+                    Text(
+                      _formatTime(noti.createdAt),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  controller.markAsRead(noti.id);
+
+                  Get.dialog(
+                    AlertDialog(
+                      title: Text(
+                        noti.title,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      content: Text(
+                        noti.message,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Get.back(),
+                          child: const Text('Close'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {},
-            ),
-          );
-        },
-      ),
+            );
+          },
+        );
+      }),
     );
+  }
+
+  String _formatTime(DateTime time) {
+    final diff = DateTime.now().difference(time);
+
+    if (diff.inMinutes < 1) return 'Just now';
+    if (diff.inMinutes < 60) return '${diff.inMinutes} min ago';
+    if (diff.inHours < 24) return '${diff.inHours} hours ago';
+    return '${diff.inDays} days ago';
   }
 }

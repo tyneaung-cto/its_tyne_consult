@@ -6,6 +6,10 @@ class HomeController extends GetxController {
     Get.toNamed('/booking');
   }
 
+  void goToBookingList() {
+    Get.toNamed('/booking-list');
+  }
+
   /// Navigate to user's sessions page
   void goToMySessions() {
     Get.toNamed('/my-sessions');

@@ -13,6 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  await GetStorage.init();
   final storage = GetStorage();
   final bool isDarkMode = storage.read('is_dark_mode') ?? false;
   final ThemeMode initialThemeMode = isDarkMode

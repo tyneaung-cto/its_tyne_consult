@@ -43,6 +43,7 @@ class RegisterController extends GetxController {
     final email = emailController.text.trim();
     final password = passwordController.text;
     final confirmPassword = confirmPasswordController.text;
+    final userName = usernameController.text.trim();
 
     if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
       Get.snackbar(
@@ -66,6 +67,7 @@ class RegisterController extends GetxController {
       final user = await _authService.registerWithEmailAndPassword(
         email,
         password,
+        userName,
       );
 
       if (user != null) {

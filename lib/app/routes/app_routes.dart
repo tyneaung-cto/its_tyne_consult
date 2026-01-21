@@ -15,6 +15,7 @@ abstract class Routes {
   static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
   static const PRIVACY_POLICY = _Paths.PRIVACY_POLICY;
   static const TERMS_AND_CONDITIONS = _Paths.TERMS_AND_CONDITIONS;
+  static const BOOKING_LIST = _Paths.BOOKING_LIST;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const NOTIFICATIONS = '/notifications';
   static const PRIVACY_POLICY = '/privacy-policy';
   static const TERMS_AND_CONDITIONS = '/terms-and-conditions';
+  static const BOOKING_LIST = '/booking-list';
 }

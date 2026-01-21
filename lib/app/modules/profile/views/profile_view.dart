@@ -14,81 +14,88 @@ class ProfileView extends GetView<ProfileController> {
         title: Text('Profile', style: Theme.of(context).textTheme.titleMedium),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // Profile header
-            _ProfileHeader(
-              name: controller.userName,
-              email: controller.userEmail,
-            ),
-
-            AppSpacing.h24,
-
-            // Account info
-            _sectionTitle('Account Information', context),
-            Card(
-              child: Column(
-                children: [
-                  _infoTile(
-                    icon: Icons.person_outline,
-                    title: 'Full Name',
-                    value: controller.userName,
-                    context: context,
-                  ),
-                  const Divider(height: 1),
-                  _infoTile(
-                    icon: Icons.email_outlined,
-                    title: 'Email',
-                    value: controller.userEmail,
-                    context: context,
-                  ),
-                  const Divider(height: 1),
-                  _infoTile(
-                    icon: Icons.badge_outlined,
-                    title: 'Role',
-                    value: controller.userRole,
-                    context: context,
-                  ),
-                ],
+      body: Obx(() {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              // Profile header
+              _ProfileHeader(
+                name: controller.userName.value,
+                email: controller.userEmail.value,
+                profileImageUrl: controller.profileImage.value,
+                hasProfileImage: controller.hasProfileImage,
+                onEditImage: controller.changeProfileImage,
               ),
-            ),
 
-            AppSpacing.h16,
+              AppSpacing.h24,
 
-            // Actions
-            _sectionTitle('Actions', context),
-            Card(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.edit_outlined),
-                    title: const Text('Edit Profile'),
-                    onTap: controller.editProfile,
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.lock_outline),
-                    title: const Text('Change Password'),
-                    onTap: controller.changePassword,
-                  ),
-                ],
+              // Account info
+              _sectionTitle('Account Information', context),
+              Card(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.person_outline),
+                      title: const Text('Full Name'),
+                      subtitle: Text(
+                        controller.userName.value,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.edit_outlined),
+                        onPressed: controller.editUserNameDialog,
+                      ),
+                    ),
+                    const Divider(height: 1),
+                    _infoTile(
+                      icon: Icons.email_outlined,
+                      title: 'Email',
+                      value: controller.userEmail.value.toString(),
+                      context: context,
+                    ),
+                    const Divider(height: 1),
+                    _infoTile(
+                      icon: Icons.badge_outlined,
+                      title: 'Role',
+                      value: controller.userRole.value.toString(),
+                      context: context,
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            AppSpacing.h24,
+              AppSpacing.h16,
 
-            // Footer
-            Text(
-              'Profile information is managed securely.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              // Actions
+              _sectionTitle('Actions', context),
+              Card(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.lock_outline),
+                      title: const Text('Change Password'),
+                      onTap: controller.changePassword,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+
+              AppSpacing.h24,
+
+              // Footer
+              Text(
+                'Profile information is managed securely.',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -130,27 +137,49 @@ class ProfileView extends GetView<ProfileController> {
 class _ProfileHeader extends StatelessWidget {
   final String name;
   final String email;
+  final String? profileImageUrl;
+  final bool hasProfileImage;
+  final VoidCallback onEditImage;
 
-  const _ProfileHeader({required this.name, required this.email});
+  const _ProfileHeader({
+    required this.name,
+    required this.email,
+    required this.profileImageUrl,
+    required this.hasProfileImage,
+    required this.onEditImage,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
+      alignment: Alignment.center,
       children: [
         CircleAvatar(
           radius: 42,
-          child: Text(
-            name.isNotEmpty ? name[0].toUpperCase() : '?',
-            style: const TextStyle(fontSize: 32),
-          ),
+          backgroundImage: hasProfileImage
+              ? NetworkImage(profileImageUrl!)
+              : null,
+          child: hasProfileImage
+              ? null
+              : Text(
+                  name.isNotEmpty ? name[0].toUpperCase() : '?',
+                  style: const TextStyle(fontSize: 32),
+                ),
         ),
-        AppSpacing.h12,
-        Text(name, style: Theme.of(context).textTheme.titleMedium),
-        AppSpacing.h4,
-        Text(
-          email,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: InkWell(
+            onTap: onEditImage,
+            child: CircleAvatar(
+              radius: 14,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: const Icon(
+                Icons.camera_alt_outlined,
+                size: 14,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ],

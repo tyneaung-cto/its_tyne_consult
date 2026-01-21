@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:its_tyne_consult/app/data/models/consultation_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:its_tyne_consult/app/core/services/firestore_service.dart';
 
 class BookingController extends GetxController {
   // Text controllers
   final TextEditingController topicController = TextEditingController();
-  final TextEditingController preferredDateController =
-      TextEditingController();
+  final TextEditingController preferredDateController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
 
   // Dropdown data
@@ -62,6 +64,109 @@ class BookingController extends GetxController {
   }
 
   /// Submit booking request (demo / placeholder logic)
+  // Future<void> submitBookingRequest() async {
+  //   if (topicController.text.trim().isEmpty ||
+  //       preferredDateController.text.isEmpty ||
+  //       selectedTimeSlot.value == null) {
+  //     Get.snackbar(
+  //       'Missing Information',
+  //       'Please fill in all required fields.',
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+  //     return;
+  //   }
+
+  //   try {
+  //     isSubmitting.value = true;
+
+  //     // TODO: Integrate Firestore booking submission here
+
+  //     await Future.delayed(const Duration(seconds: 1));
+
+  //     Get.snackbar(
+  //       'Request Submitted',
+  //       'Your consultation request has been submitted successfully.',
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+
+  //     // Clear form
+  //     topicController.clear();
+  //     preferredDateController.clear();
+  //     notesController.clear();
+  //     selectedTimeSlot.value = null;
+  //     selectedDuration.value = 30;
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       'Error',
+  //       'Unable to submit request. Please try again.',
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+  //   } finally {
+  //     isSubmitting.value = false;
+  //   }
+  // }
+  // Future<void> submitBookingRequest() async {
+  //   if (topicController.text.trim().isEmpty ||
+  //       preferredDateController.text.isEmpty ||
+  //       selectedTimeSlot.value == null) {
+  //     Get.snackbar(
+  //       'Missing Information',
+  //       'Please fill in all required fields.',
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+  //     return;
+  //   }
+
+  //   try {
+  //     isSubmitting.value = true;
+
+  //     final user = FirebaseAuth.instance.currentUser;
+  //     if (user == null) {
+  //       throw Exception('User not authenticated');
+  //     }
+
+  //     final consultation = Consultation(
+  //       id: '', // Firestore will generate this
+  //       userId: user.uid,
+  //       topic: topicController.text.trim(),
+  //       timeSlot: selectedTimeSlot.value!,
+  //       duration: selectedDuration.value,
+  //       notes: notesController.text.trim(),
+  //       status: 'pending',
+  //       preferredDate: DateTime.parse(preferredDateController.text),
+  //       createdAt: DateTime.now(),
+  //       actionBy: null,
+  //       actionTime: null,
+  //     );
+
+  //     await FirestoreService.instance.createConsultation(consultation);
+
+  //     Get.snackbar(
+  //       'Request Submitted',
+  //       'Your consultation request has been sent.',
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+
+  //     // Clear form
+  //     topicController.clear();
+  //     preferredDateController.clear();
+  //     notesController.clear();
+  //     selectedTimeSlot.value = null;
+  //     selectedDuration.value = 30;
+
+  //     Get.back(); // optional: return to previous screen
+  //   } catch (e) {
+  //     debugPrint('❌ Booking error: $e');
+
+  //     Get.snackbar(
+  //       'Error',
+  //       'Unable to submit request. Please try again.',
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+  //   } finally {
+  //     isSubmitting.value = false;
+  //   }
+  // }
   Future<void> submitBookingRequest() async {
     if (topicController.text.trim().isEmpty ||
         preferredDateController.text.isEmpty ||
@@ -77,14 +182,35 @@ class BookingController extends GetxController {
     try {
       isSubmitting.value = true;
 
-      // TODO: Integrate Firestore booking submission here
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User not authenticated');
+      }
 
-      await Future.delayed(const Duration(seconds: 1));
+      final consultation = Consultation(
+        id: '',
+        userId: user.uid,
+        topic: topicController.text.trim(),
+        timeSlot: selectedTimeSlot.value!,
+        duration: selectedDuration.value,
+        notes: notesController.text.trim(),
+        status: 'pending',
+        preferredDate: DateTime.parse(preferredDateController.text),
+        createdAt: DateTime.now(),
+        actionBy: null,
+        actionTime: null,
+      );
 
+      await FirestoreService.instance.createConsultation(consultation);
+
+      // ✅ SHOW FEEDBACK FIRST
       Get.snackbar(
         'Request Submitted',
-        'Your consultation request has been submitted successfully.',
+        'Your consultation request has been sent successfully.',
         snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.green.shade600,
+        colorText: Colors.white,
       );
 
       // Clear form
@@ -93,11 +219,19 @@ class BookingController extends GetxController {
       notesController.clear();
       selectedTimeSlot.value = null;
       selectedDuration.value = 30;
+
+      // ✅ WAIT before navigating back
+      await Future.delayed(const Duration(milliseconds: 1500));
+      Get.back();
     } catch (e) {
+      debugPrint('❌ Booking error: $e');
+
       Get.snackbar(
         'Error',
         'Unable to submit request. Please try again.',
         snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.shade600,
+        colorText: Colors.white,
       );
     } finally {
       isSubmitting.value = false;
