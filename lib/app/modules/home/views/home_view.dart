@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:its_tyne_consult/app/core/values/app_spacing.dart';
 import 'package:its_tyne_consult/app/shared/widgets/my_drawer.dart';
 
@@ -68,23 +69,54 @@ class HomeView extends GetView<HomeController> {
                 AppSpacing.h24,
 
                 // Quick actions
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: _QuickActionCard(
+                //         icon: Icons.schedule,
+                //         title: 'Book Session',
+                //         subtitle: '30 / 40 minutes',
+                //         count: controller.bookingsCount.value.toInt(),
+                //         onTap: controller.goToBookingList,
+                //       ),
+                //     ),
+                //     AppSpacing.w16,
+                //     Expanded(
+                //       child: _QuickActionCard(
+                //         icon: Icons.history,
+                //         title: 'My Sessions',
+                //         subtitle: 'View history',
+                //         count: controller.sessionsCount.value.toInt(),
+                //         onTap: controller.goToMySessions,
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Row(
                   children: [
                     Expanded(
-                      child: _QuickActionCard(
-                        icon: Icons.schedule,
-                        title: 'Book Session',
-                        subtitle: '30 / 40 minutes',
-                        onTap: controller.goToBookingList,
+                      child: Obx(
+                        () => _QuickActionCard(
+                          icon: Icons.schedule,
+                          title: 'Book Session',
+                          subtitle: '30 / 40 minutes',
+                          count: controller.bookingsCount.value,
+                          onTap: controller.goToBookingList,
+                        ),
                       ),
                     ),
+
                     AppSpacing.w16,
+
                     Expanded(
-                      child: _QuickActionCard(
-                        icon: Icons.history,
-                        title: 'My Sessions',
-                        subtitle: 'View history',
-                        onTap: controller.goToMySessions,
+                      child: Obx(
+                        () => _QuickActionCard(
+                          icon: Icons.history,
+                          title: 'My Sessions',
+                          subtitle: 'View history',
+                          count: controller.sessionsCount.value,
+                          onTap: controller.goToMySessions,
+                        ),
                       ),
                     ),
                   ],
@@ -98,19 +130,44 @@ class HomeView extends GetView<HomeController> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 AppSpacing.h12,
-                Card(
-                  child: ListTile(
-                    leading: const Icon(Icons.event_available),
-                    title: const Text('No upcoming sessions'),
-                    subtitle: const Text(
-                      'You have no scheduled consultations yet.',
-                    ),
-                    trailing: TextButton(
-                      onPressed: controller.goToBooking,
-                      child: const Text('Book Now'),
-                    ),
-                  ),
-                ),
+                Obx(() {
+                  final sessions = controller.upcomingSessions;
+
+                  if (sessions.isEmpty) {
+                    return Card(
+                      child: ListTile(
+                        leading: const Icon(Icons.event_available),
+                        title: const Text('No upcoming sessions'),
+                        subtitle: const Text(
+                          'You have no scheduled consultations yet.',
+                        ),
+                        trailing: TextButton(
+                          onPressed: controller.goToBooking,
+                          child: const Text('Book Now'),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: controller.upcomingSessions.map((session) {
+                      final dt = (session['scheduledAt']).toDate();
+                      final duration = session['duration'];
+
+                      return Card(
+                        child: ListTile(
+                          leading: const Icon(Icons.schedule),
+                          title: Text('${dt.day}/${dt.month}/${dt.year}'),
+                          subtitle: Text(
+                            'Time ${TimeOfDay.fromDateTime(dt).format(context)} • $duration mins',
+                          ),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: controller.goToMySessions,
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }),
 
                 AppSpacing.h24,
 
@@ -204,12 +261,14 @@ class _QuickActionCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
+  final int count;
   final VoidCallback onTap;
 
   const _QuickActionCard({
     required this.icon,
     required this.title,
     required this.subtitle,
+    required this.count,
     required this.onTap,
   });
 
@@ -234,6 +293,23 @@ class _QuickActionCard extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
+              AppSpacing.h4,
+              if (count > 0)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GFBadge(
+                      color: Theme.of(context).colorScheme.primary,
+                      child: Text(
+                        count.toString(),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),

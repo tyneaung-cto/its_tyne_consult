@@ -100,6 +100,14 @@ class SuperadminHomeController extends GetxController {
         createdAt: now,
       );
 
+      // 2.5️⃣ If confirmed → create consultation session
+      if (status == 'confirmed') {
+        await _createConsultationSession(
+          consultationId: consultationId,
+          userId: userId,
+        );
+      }
+
       // 3️⃣ Send FCM topic push (role topic or personal topic)
       await FirestoreService.instance.sendFcmPushToTopic(
         topic: userId, // personal topic (uid-based)
@@ -111,6 +119,58 @@ class SuperadminHomeController extends GetxController {
     } catch (e) {
       debugPrint('❌ updateConsultationStatus error: $e');
       rethrow;
+    }
+  }
+
+  /// Create a session document when consultation is confirmed
+  Future<void> _createConsultationSession({
+    required String consultationId,
+    required String userId,
+  }) async {
+    try {
+      debugPrint('🟡 [SESSION] Start creating session for consultation: $consultationId | user: $userId');
+
+      final consultationDoc = await FirebaseFirestore.instance
+          .collection('consultations')
+          .doc(consultationId)
+          .get();
+
+      debugPrint('🟡 [SESSION] Consultation exists: ${consultationDoc.exists}');
+
+      if (!consultationDoc.exists) {
+        debugPrint('❌ [SESSION] Consultation doc NOT FOUND. Abort session creation');
+        return;
+      }
+
+      final data = consultationDoc.data() as Map<String, dynamic>;
+      debugPrint('🟡 [SESSION] Consultation data: $data');
+
+      final duration = data['duration'] ?? 30;
+
+      Timestamp? ts = data['preferredDate'];
+      if (ts == null) {
+        debugPrint('⚠️ [SESSION] preferredDate is NULL, fallback to +1 day');
+      }
+
+      final scheduledAt = ts?.toDate() ?? DateTime.now().add(const Duration(days: 1));
+
+      final sessionMap = {
+        'consultationId': consultationId,
+        'userId': userId,
+        'duration': duration,
+        'meetingLink': '',
+        'status': 'upcoming',
+        'scheduledAt': Timestamp.fromDate(scheduledAt),
+        'createdAt': Timestamp.now(),
+      };
+
+      debugPrint('🟡 [SESSION] Creating session with data: $sessionMap');
+
+      final ref = await FirebaseFirestore.instance.collection('sessions').add(sessionMap);
+
+      debugPrint('✅ [SESSION] Session created successfully with id: ${ref.id}');
+    } catch (e) {
+      debugPrint('❌ createConsultationSession error: $e');
     }
   }
 

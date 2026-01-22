@@ -31,15 +31,35 @@ class BookingListController extends GetxController {
     _subscription = FirestoreService.instance
         .streamUserConsultations(user.uid)
         .listen(
-      (data) {
-        consultations.assignAll(data);
-        isLoading.value = false;
-      },
-      onError: (error) {
-        isLoading.value = false;
-        debugPrint('❌ BookingList stream error: $error');
-      },
-    );
+          (data) {
+            consultations.assignAll(data);
+            isLoading.value = false;
+          },
+          onError: (error) {
+            isLoading.value = false;
+            debugPrint('❌ BookingList stream error: $error');
+          },
+        );
+  }
+
+  Future<void> cancelConsultation(String consultationId) async {
+    try {
+      debugPrint('🟡 Cancel consultation -> $consultationId');
+
+      await FirebaseFirestore.instance
+          .collection('consultations')
+          .doc(consultationId)
+          .update({'status': 'cancelled', 'cancelledAt': Timestamp.now()});
+
+      debugPrint('✅ Consultation cancelled successfully');
+    } catch (e) {
+      debugPrint('❌ cancelConsultation error: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to cancel consultation',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
   @override

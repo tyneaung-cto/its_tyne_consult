@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/admin-list-sessions/bindings/admin_list_sessions_binding.dart';
+import '../modules/admin-list-sessions/views/admin_list_sessions_view.dart';
 import '../modules/auth-gate/bindings/auth_gate_binding.dart';
 import '../modules/auth-gate/views/auth_gate_view.dart';
 import '../modules/banned-home/bindings/banned_home_binding.dart';
@@ -141,6 +143,11 @@ class AppPages {
       name: _Paths.CREATE_FCM,
       page: () => const CreateFcmView(),
       binding: CreateFcmBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADMIN_LIST_SESSIONS,
+      page: () => const AdminListSessionsView(),
+      binding: AdminListSessionsBinding(),
     ),
   ];
 }

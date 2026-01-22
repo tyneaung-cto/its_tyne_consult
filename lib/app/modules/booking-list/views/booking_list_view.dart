@@ -9,19 +9,14 @@ class BookingListView extends GetView<BookingListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BookingListView'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('My Bookings'), centerTitle: false),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
         if (controller.consultations.isEmpty) {
-          return const Center(
-            child: Text('No bookings found'),
-          );
+          return const Center(child: Text('No bookings found'));
         }
 
         return ListView.separated(
@@ -34,13 +29,12 @@ class BookingListView extends GetView<BookingListController> {
             return Card(
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
                   child: Icon(
                     Icons.calendar_today,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onPrimaryContainer,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                 ),
                 title: Text(
@@ -64,10 +58,66 @@ class BookingListView extends GetView<BookingListController> {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 6),
-                    _StatusChip(status: consultation.status),
+                    // Show status chip only when NOT pending (pending handled by action row below)
+                    if (consultation.status.toLowerCase() != 'pending')
+                      _StatusChip(status: consultation.status),
+                    if (consultation.status.toLowerCase() == 'pending') ...[
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Pending badge (same style feel as chip, not pill button)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.orange.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Colors.orange.withOpacity(0.4),
+                              ),
+                            ),
+                            child: Text(
+                              'PENDING',
+                              style: TextStyle(
+                                color: Colors.orange.shade800,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 10),
+
+                          // Cancel button – same rectangular style (not pill)
+                          OutlinedButton.icon(
+                            onPressed: () =>
+                                controller.cancelConsultation(consultation.id),
+                            icon: const Icon(Icons.cancel_outlined, size: 18),
+                            label: const Text('Cancel'),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 10,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              foregroundColor: Theme.of(
+                                context,
+                              ).colorScheme.error,
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
-                trailing: const Icon(Icons.chevron_right),
+                // trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   _showBookingDetailDialog(context, consultation);
                 },
@@ -83,10 +133,7 @@ class BookingListView extends GetView<BookingListController> {
     return '${date.day}/${date.month}/${date.year}';
   }
 
-  void _showBookingDetailDialog(
-    BuildContext context,
-    consultation,
-  ) {
+  void _showBookingDetailDialog(BuildContext context, consultation) {
     Get.dialog(
       AlertDialog(
         title: Text(
@@ -104,16 +151,15 @@ class BookingListView extends GetView<BookingListController> {
             Text('Duration: ${consultation.duration} minutes'),
             const SizedBox(height: 8),
             Text('Notes:'),
-            Text(consultation.notes.isEmpty
-                ? 'No notes provided'
-                : consultation.notes),
+            Text(
+              consultation.notes.isEmpty
+                  ? 'No notes provided'
+                  : consultation.notes,
+            ),
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Close'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Close')),
         ],
       ),
     );
@@ -126,25 +172,37 @@ class _StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color;
-    switch (status) {
+    final scheme = Theme.of(context).colorScheme;
+
+    Color bgColor;
+    Color textColor;
+
+    switch (status.toLowerCase()) {
+      case 'confirmed':
       case 'approved':
-        color = Colors.green;
+        bgColor = scheme.primary.withOpacity(0.15);
+        textColor = scheme.primary;
         break;
+
       case 'rejected':
-        color = Colors.red;
+      case 'cancelled':
+        bgColor = scheme.error.withOpacity(0.15);
+        textColor = scheme.error;
         break;
+
       case 'pending':
       default:
-        color = Colors.orange;
+        bgColor = Colors.orange.withOpacity(0.18);
+        textColor = Colors.orange.shade800;
     }
 
     return Chip(
       label: Text(
         status.toUpperCase(),
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
       ),
-      backgroundColor: color,
+      backgroundColor: bgColor,
+      side: BorderSide(color: textColor.withOpacity(0.3)),
     );
   }
 }
