@@ -30,6 +30,8 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/request-del-home/bindings/request_del_home_binding.dart';
+import '../modules/request-del-home/views/request_del_home_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
 import '../modules/setting/views/setting_view.dart';
 import '../modules/superadmin-home/bindings/superadmin_home_binding.dart';
@@ -155,6 +157,11 @@ class AppPages {
       name: _Paths.ABOUT,
       page: () => const AboutView(),
       binding: AboutBinding(),
+    ),
+    GetPage(
+      name: _Paths.REQUEST_DEL_HOME,
+      page: () => const RequestDelHomeView(),
+      binding: RequestDelHomeBinding(),
     ),
   ];
 }

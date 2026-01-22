@@ -9,6 +9,8 @@ class AppUser {
   final bool isBanned;
   final String profileImage;
   final DateTime createdAt;
+  final bool requestDel;
+  final DateTime? requestDelApplyDate;
 
   AppUser({
     required this.uid,
@@ -19,6 +21,8 @@ class AppUser {
     required this.isBanned,
     required this.profileImage,
     required this.createdAt,
+    required this.requestDel,
+    this.requestDelApplyDate,
   });
 
   factory AppUser.fromMap(String uid, Map<String, dynamic> data) {
@@ -31,6 +35,10 @@ class AppUser {
       isBanned: data['isBanned'] ?? false,
       profileImage: data['profile_image'] ?? '',
       createdAt: data['createdAt']?.toDate() ?? DateTime.now(),
+      requestDel: data['requestDel'] ?? false,
+      requestDelApplyDate: data['requestDelApplyDate'] != null
+          ? (data['requestDelApplyDate'] as Timestamp).toDate()
+          : null,
     );
   }
 

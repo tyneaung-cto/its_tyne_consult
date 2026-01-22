@@ -32,6 +32,9 @@ class AuthGateController extends GetxController {
       if (exists) {
         final isBanned = await FirestoreService.instance.isUserBanned(user.uid);
         final isUser = await FirestoreService.instance.isUser(user.uid);
+        final isRequestDeleted = await FirestoreService.instance.isRequestedDel(
+          user.uid,
+        );
         // 🔔 Subscribe user to FCM topics after auth success
         final role = await FcmService.getUserRole(user.uid);
         await FcmService.subscribeTopics(role);
@@ -40,6 +43,8 @@ class AuthGateController extends GetxController {
           await _auth.signOut();
           Get.offAllNamed(Routes.BANNED_HOME);
           return;
+        } else if (isRequestDeleted) {
+          Get.offAllNamed(Routes.REQUEST_DEL_HOME);
         } else if (isUser) {
           Get.offAllNamed(Routes.HOME);
         } else {

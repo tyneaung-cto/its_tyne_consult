@@ -88,6 +88,15 @@ class FirestoreService {
     return false;
   }
 
+  Future<bool> isRequestedDel(String uid) async {
+    final doc = await _db.collection('users').doc(uid).get();
+    if (doc.exists) {
+      final data = doc.data();
+      return data?['requestDel'] ?? false;
+    }
+    return false;
+  }
+
   Future<bool> isUser(String uid) async {
     final doc = await _db.collection('users').doc(uid).get();
     if (doc.exists) {

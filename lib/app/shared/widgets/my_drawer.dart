@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:its_tyne_consult/app/core/constants/app_constants.dart';
 import 'package:its_tyne_consult/app/core/services/auth_service.dart';
@@ -131,7 +132,66 @@ class _MyDrawerState extends State<MyDrawer> {
                         textStyle: TextStyle(
                           color: Theme.of(context).colorScheme.error,
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          final confirm = await showDialog<bool>(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: const Text('Delete Account'),
+                              content: const Text(
+                                'Are you sure you want to delete your account?\n\nTHIS ACTION CANNOT BE UNDONE. All your data will be deleted within 7 working days.',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(ctx, false),
+                                  child: const Text('Cancel'),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.error,
+                                    foregroundColor:
+                                        Theme.of(context).colorScheme.onError,
+                                  ),
+                                  onPressed: () => Navigator.pop(ctx, true),
+                                  child: const Text('Delete'),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (confirm == true) {
+                            final uid = AuthService().getCurrentUser()?.uid;
+
+                            if (uid != null) {
+                              try {
+                                final applyDate = DateTime.now();
+
+                                await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(uid)
+                                    .update({
+                                  'requestDel': true,
+                                  'requestDelApplyDate':
+                                      Timestamp.fromDate(applyDate),
+                                });
+
+                                debugPrint(
+                                    '🗑️ Account deletion requested -> $uid at $applyDate');
+                              } catch (e) {
+                                debugPrint(
+                                    '❌ request deletion update error: $e');
+                              }
+                            }
+
+                            Get.back();
+                            
+                            Get.snackbar(
+                              'Request Submitted',
+                              'Your account deletion request has been received. Our team will process it within 7 working days.',
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          }
+                        },
                       ),
                       DrawerListTile(
                         title: "Logout",

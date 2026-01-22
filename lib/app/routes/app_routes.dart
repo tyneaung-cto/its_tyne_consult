@@ -25,6 +25,7 @@ abstract class Routes {
   static const CREATE_FCM = _Paths.CREATE_FCM;
   static const ADMIN_LIST_SESSIONS = _Paths.ADMIN_LIST_SESSIONS;
   static const ABOUT = _Paths.ABOUT;
+  static const REQUEST_DEL_HOME = _Paths.REQUEST_DEL_HOME;
 }
 
 abstract class _Paths {
@@ -50,4 +51,5 @@ abstract class _Paths {
   static const CREATE_FCM = '/create-fcm';
   static const ADMIN_LIST_SESSIONS = '/admin-list-sessions';
   static const ABOUT = '/about';
+  static const REQUEST_DEL_HOME = '/request-del-home';
 }
