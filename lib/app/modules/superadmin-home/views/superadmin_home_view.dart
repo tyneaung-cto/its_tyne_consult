@@ -16,7 +16,7 @@ class SuperadminHomeView extends GetView<SuperadminHomeController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ItsTyneConsult: Super Admin'),
-        centerTitle: false,
+        centerTitle: true,
         // actions: [
         //   IconButton(
         //     tooltip: 'Logout',

@@ -17,7 +17,7 @@ class MySessionsView extends GetView<MySessionsController> {
           'My Sessions',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        centerTitle: false,
+        centerTitle: true,
       ),
       body: StreamBuilder<List<dynamic>>(
         stream: controller.mySessionsStream(),

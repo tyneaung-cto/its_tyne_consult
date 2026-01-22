@@ -24,7 +24,7 @@ class HomeView extends GetView<HomeController> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: controller.goToBooking,
         icon: const Icon(Icons.schedule_outlined),
-        label: const Text('Request'),
+        label: Text('request'.tr),
         tooltip: 'Request Consultation',
       ),
 
@@ -63,9 +63,7 @@ class HomeView extends GetView<HomeController> {
                           child: Text(
                             unread > 99 ? '99+' : '$unread',
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
+                            style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
                                   color: Theme.of(context).colorScheme.onError,
                                   fontWeight: FontWeight.bold,
@@ -92,50 +90,25 @@ class HomeView extends GetView<HomeController> {
               delegate: SliverChildListDelegate([
                 // Welcome section
                 Text(
-                  'Welcome to ItsTyne Consult',
+                  'home_welcome_title'.tr,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 AppSpacing.h8,
                 Text(
-                  'Book your free consultation session and get started.',
+                  'home_welcome_subtitle'.tr,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
-
                 AppSpacing.h24,
 
-                // Quick actions
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: _QuickActionCard(
-                //         icon: Icons.schedule,
-                //         title: 'Book Session',
-                //         subtitle: '30 / 40 minutes',
-                //         count: controller.bookingsCount.value.toInt(),
-                //         onTap: controller.goToBookingList,
-                //       ),
-                //     ),
-                //     AppSpacing.w16,
-                //     Expanded(
-                //       child: _QuickActionCard(
-                //         icon: Icons.history,
-                //         title: 'My Sessions',
-                //         subtitle: 'View history',
-                //         count: controller.sessionsCount.value.toInt(),
-                //         onTap: controller.goToMySessions,
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 Row(
                   children: [
                     Expanded(
                       child: Obx(
                         () => _QuickActionCard(
                           icon: Icons.schedule,
-                          title: 'Book Session',
+                          title: 'home_book_session'.tr,
                           subtitle: '30 / 40 minutes',
                           count: controller.bookingsCount.value,
                           onTap: controller.goToBookingList,
@@ -149,8 +122,8 @@ class HomeView extends GetView<HomeController> {
                       child: Obx(
                         () => _QuickActionCard(
                           icon: Icons.history,
-                          title: 'My Sessions',
-                          subtitle: 'View history',
+                          title: 'home_my_sessions'.tr,
+                          subtitle: 'home_view_history'.tr,
                           count: controller.sessionsCount.value,
                           onTap: controller.goToMySessions,
                         ),
@@ -163,7 +136,7 @@ class HomeView extends GetView<HomeController> {
 
                 // Upcoming section
                 Text(
-                  'Upcoming Sessions',
+                  'home_upcoming_title'.tr,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 AppSpacing.h12,
@@ -174,13 +147,11 @@ class HomeView extends GetView<HomeController> {
                     return Card(
                       child: ListTile(
                         leading: const Icon(Icons.event_available),
-                        title: const Text('No upcoming sessions'),
-                        subtitle: const Text(
-                          'You have no scheduled consultations yet.',
-                        ),
+                        title: Text('home_no_upcoming'.tr),
+                        subtitle: Text('home_no_upcoming_desc'.tr),
                         trailing: TextButton(
                           onPressed: controller.goToBooking,
-                          child: const Text('Book Now'),
+                          child: Text('home_book_now'.tr),
                         ),
                       ),
                     );
@@ -205,40 +176,38 @@ class HomeView extends GetView<HomeController> {
                     }).toList(),
                   );
                 }),
-
                 AppSpacing.h24,
 
                 // How it works
                 Text(
-                  'How It Works',
+                  'home_how_it_works'.tr,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 AppSpacing.h12,
                 Card(
                   child: Column(
-                    children: const [
+                    children: [
+                      // one
                       ListTile(
                         leading: Icon(Icons.looks_one_outlined),
-                        title: Text('Request a Session'),
-                        subtitle: Text(
-                          'Choose a 30 or 40 minute consultation slot',
-                        ),
+                        title: Text('home_step_1_title'.tr),
+                        subtitle: Text('home_step_1_desc'.tr),
                       ),
                       Divider(height: 1),
+
+                      // two
                       ListTile(
                         leading: Icon(Icons.looks_two_outlined),
-                        title: Text('Get Confirmation'),
-                        subtitle: Text(
-                          'We will review and confirm your request',
-                        ),
+                        title: Text('home_step_2_title'.tr),
+                        subtitle: Text('home_step_2_desc'.tr),
                       ),
                       Divider(height: 1),
+
+                      // three
                       ListTile(
                         leading: Icon(Icons.looks_3_outlined),
-                        title: Text('Join Consultation'),
-                        subtitle: Text(
-                          'Attend your session at the scheduled time',
-                        ),
+                        title: Text('home_step_3_title'.tr),
+                        subtitle: Text('home_step_3_desc'.tr),
                       ),
                     ],
                   ),
@@ -247,33 +216,31 @@ class HomeView extends GetView<HomeController> {
                 AppSpacing.h24,
 
                 // Why choose ItsTyne
-                Text(
-                  'Why Choose ItsTyne Consult',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                AppSpacing.h12,
-                Row(
-                  children: const [
-                    Expanded(
-                      child: _InfoCard(
-                        icon: Icons.verified_outlined,
-                        title: 'Professional',
-                        subtitle: 'Experienced consultation',
-                      ),
-                    ),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: _InfoCard(
-                        icon: Icons.schedule_outlined,
-                        title: 'Flexible',
-                        subtitle: 'Simple scheduling',
-                      ),
-                    ),
-                  ],
-                ),
-
-                AppSpacing.h32,
-
+                // Text(
+                //   'Why Choose ItsTyne Consult',
+                //   style: Theme.of(context).textTheme.titleMedium,
+                // ),
+                // AppSpacing.h12,
+                // Row(
+                //   children: const [
+                //     Expanded(
+                //       child: _InfoCard(
+                //         icon: Icons.verified_outlined,
+                //         title: 'Professional',
+                //         subtitle: 'Experienced consultation',
+                //       ),
+                //     ),
+                //     SizedBox(width: 16),
+                //     Expanded(
+                //       child: _InfoCard(
+                //         icon: Icons.schedule_outlined,
+                //         title: 'Flexible',
+                //         subtitle: 'Simple scheduling',
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // AppSpacing.h32,
                 Center(
                   child: Text(
                     'Free consultation sessions are subject to availability.',

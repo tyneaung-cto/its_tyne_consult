@@ -12,25 +12,28 @@ class SettingView extends GetView<SettingController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings', style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'settings'.tr,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         centerTitle: true,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Appearance
-          _sectionTitle(context, 'Appearance'),
+          _sectionTitle(context, 'appearance'.tr),
           Card(
             child: Column(
               children: [
                 Obx(
                   () => SwitchListTile(
                     title: Text(
-                      'Dark Mode',
+                      'dark_mode'.tr,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     subtitle: Text(
-                      'Enable dark theme',
+                      'enable_dark_theme'.tr,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -46,25 +49,70 @@ class SettingView extends GetView<SettingController> {
           AppSpacing.h16,
 
           // Language
-          _sectionTitle(context, 'Language'),
+          _sectionTitle(context, 'language'.tr),
           Card(
-            child: Column(
-              children: [
-                ListTile(
-                  title: const Text('Language'),
-                  subtitle: Obx(
-                    () => Text(
-                      controller.currentLanguage.value,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+            child: Obx(() {
+              final isEn = controller.currentLanguage.value == 'English';
+              final isMm = controller.currentLanguage.value == 'Myanmar';
+
+              final theme = Theme.of(context);
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.language, color: theme.colorScheme.primary),
+                    const SizedBox(width: 12),
+
+                    Expanded(
+                      child: Text(
+                        'language'.tr,
+                        style: theme.textTheme.bodyMedium,
                       ),
                     ),
-                  ),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: controller.changeLanguage,
+
+                    // 🇺🇸 English
+                    ChoiceChip(
+                      label: const Text('🇺🇸 EN'),
+                      selected: isEn,
+                      showCheckmark: false,
+                      selectedColor: theme.colorScheme.secondary,
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
+                      labelStyle: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: isEn ? FontWeight.bold : FontWeight.normal,
+                        color: isEn
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.onSurfaceVariant,
+                      ),
+                      onSelected: (_) => controller.setLanguage('en'),
+                    ),
+
+                    const SizedBox(width: 8),
+
+                    // 🇲🇲 Myanmar
+                    ChoiceChip(
+                      label: const Text('🇲🇲 MM'),
+                      selected: isMm,
+                      showCheckmark: false,
+                      selectedColor: theme.colorScheme.secondary,
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
+                      labelStyle: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: isMm ? FontWeight.bold : FontWeight.normal,
+                        color: isMm
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.onSurfaceVariant,
+                      ),
+                      onSelected: (_) => controller.setLanguage('my'),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            }),
           ),
 
           AppSpacing.h16,
@@ -92,31 +140,31 @@ class SettingView extends GetView<SettingController> {
           // AppSpacing.h16,
 
           // About
-          _sectionTitle(context, 'About'),
+          _sectionTitle(context, 'about_section'.tr),
           Card(
             child: Column(
               children: [
                 ListTile(
                   leading: const Icon(Icons.info_outline),
-                  title: const Text('About ItsTyne Consult'),
+                  title: Text('about_app'.tr),
                   onTap: controller.openAbout,
                 ),
                 const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.privacy_tip_outlined),
-                  title: const Text('Privacy Policy'),
+                  title: Text('privacy_policy'.tr),
                   onTap: controller.openPrivacyPolicy,
                 ),
                 const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.description_outlined),
-                  title: const Text('Terms & Conditions'),
+                  title: Text('terms_conditions'.tr),
                   onTap: controller.openTerms,
                 ),
                 const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.system_update),
-                  title: const Text('App Version'),
+                  title: Text('app_version'.tr),
                   subtitle: Text(
                     AppConstants.appVersion,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -140,7 +188,7 @@ class SettingView extends GetView<SettingController> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '© 2026 TECH4MM. All rights reserved.',
+                  'copyright'.tr,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),

@@ -26,7 +26,7 @@ class AppDarkTheme {
       backgroundColor: AppColors.darkBackground,
       foregroundColor: Colors.white,
       elevation: 0,
-      centerTitle: false,
+      centerTitle: true,
     ),
 
     // Cards

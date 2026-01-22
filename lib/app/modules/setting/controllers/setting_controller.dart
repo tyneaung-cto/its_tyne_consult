@@ -5,6 +5,7 @@ import '../../../core/services/auth_service.dart';
 
 class SettingController extends GetxController {
   static const String _themeKey = 'is_dark_mode';
+  static const String _langKey = 'app_language';
 
   final GetStorage _box = GetStorage();
 
@@ -29,6 +30,21 @@ class SettingController extends GetxController {
         Get.changeThemeMode(savedTheme ? ThemeMode.dark : ThemeMode.light);
       });
     }
+
+    final savedLang = _box.read(_langKey);
+    if (savedLang != null && savedLang is String) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        debugPrint('🌐 Restoring saved language -> $savedLang');
+
+        if (savedLang == 'my') {
+          currentLanguage.value = 'Myanmar';
+          Get.updateLocale(const Locale('my', 'MM'));
+        } else {
+          currentLanguage.value = 'English';
+          Get.updateLocale(const Locale('en', 'US'));
+        }
+      });
+    }
   }
 
   /// Toggle light / dark theme
@@ -39,16 +55,36 @@ class SettingController extends GetxController {
   }
 
   /// Change application language
-  void changeLanguage() {
-    // MVP: simple toggle for demo purpose
-    if (currentLanguage.value == 'English') {
-      currentLanguage.value = 'Myanmar';
-      // Example:
-      // Get.updateLocale(const Locale('my', 'MM'));
-    } else {
-      currentLanguage.value = 'English';
-      // Get.updateLocale(const Locale('en', 'US'));
-    }
+  // void changeLanguage() {
+  //   final next = currentLanguage.value == 'English' ? 'Myanmar' : 'English';
+  //   debugPrint('🌐 changeLanguage() tapped -> switching to $next');
+  //   setLanguage(next);
+  // }
+
+  /// Explicitly set language (better for toggles / flags)
+  void setLanguage(String language) {
+    debugPrint('🌐 setLanguage() called with = $language');
+
+    // accept either display text or short code
+    final isMyanmar = language == 'my' || language == 'Myanmar';
+
+    final langCode = isMyanmar ? 'my' : 'en';
+    final locale = isMyanmar
+        ? const Locale('my', 'MM')
+        : const Locale('en', 'US');
+
+    // update display label
+    currentLanguage.value = isMyanmar ? 'Myanmar' : 'English';
+
+    // persist only short code
+    _box.write(_langKey, langCode);
+
+    debugPrint('💾 Saved to storage: $_langKey = $langCode');
+    debugPrint('🚀 Updating GetX locale -> $locale');
+
+    Get.updateLocale(locale);
+
+    debugPrint('✅ Locale updated successfully');
   }
 
   /// Navigate to profile page

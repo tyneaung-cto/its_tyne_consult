@@ -13,7 +13,7 @@ class BookingView extends GetView<BookingController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Request Consultation',
+          'request_consultation'.tr,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         centerTitle: true,
@@ -24,12 +24,12 @@ class BookingView extends GetView<BookingController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Consultation Details',
+              'consultation_details'.tr,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             AppSpacing.h8,
             Text(
-              'Please provide the details below to request your consultation session.',
+              'consultation_details_desc'.tr,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
@@ -39,8 +39,8 @@ class BookingView extends GetView<BookingController> {
 
             TextFormField(
               controller: controller.topicController,
-              decoration: const InputDecoration(
-                labelText: 'Consultation Topic',
+              decoration: InputDecoration(
+                labelText: 'consultation_topic'.tr,
                 hintText: 'e.g. App Development, Business Strategy',
               ),
             ),
@@ -49,8 +49,8 @@ class BookingView extends GetView<BookingController> {
 
             TextFormField(
               controller: controller.preferredDateController,
-              decoration: const InputDecoration(
-                labelText: 'Preferred Date',
+              decoration: InputDecoration(
+                labelText: 'preferred_date'.tr,
                 hintText: 'Select a date',
               ),
               readOnly: true,
@@ -62,8 +62,8 @@ class BookingView extends GetView<BookingController> {
             Obx(
               () => DropdownButtonFormField<String>(
                 value: controller.selectedTimeSlot.value,
-                decoration: const InputDecoration(
-                  labelText: 'Preferred Time Slot',
+                decoration: InputDecoration(
+                  labelText: 'preferred_time_slot'.tr,
                 ),
                 items: controller.timeSlots
                     .map(
@@ -80,9 +80,7 @@ class BookingView extends GetView<BookingController> {
             Obx(
               () => DropdownButtonFormField<int>(
                 value: controller.selectedDuration.value,
-                decoration: const InputDecoration(
-                  labelText: 'Session Duration',
-                ),
+                decoration: InputDecoration(labelText: 'session_duration'.tr),
                 items: controller.durations
                     .map(
                       (duration) => DropdownMenuItem(
@@ -99,8 +97,8 @@ class BookingView extends GetView<BookingController> {
 
             TextFormField(
               controller: controller.notesController,
-              decoration: const InputDecoration(
-                labelText: 'Additional Notes (Optional)',
+              decoration: InputDecoration(
+                labelText: 'additional_notes_optional'.tr,
                 hintText: 'Any specific questions or context',
               ),
               maxLines: 4,
@@ -121,7 +119,7 @@ class BookingView extends GetView<BookingController> {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Submit Request'),
+                      : Text('submit_request'.tr),
                 ),
               ),
             ),
@@ -130,7 +128,7 @@ class BookingView extends GetView<BookingController> {
 
             Center(
               child: Text(
-                'You will receive a confirmation once your request is reviewed.',
+                'request_confirmation_note'.tr,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),

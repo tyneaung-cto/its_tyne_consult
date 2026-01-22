@@ -10,7 +10,7 @@ class AdminListSessionsView extends GetView<AdminListSessionsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sessions'), centerTitle: false),
+      appBar: AppBar(title: const Text('Sessions'), centerTitle: true),
       body: Column(
         children: [
           // =========================

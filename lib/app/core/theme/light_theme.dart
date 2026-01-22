@@ -26,7 +26,7 @@ class AppLightTheme {
       backgroundColor: AppColors.lightBackground,
       foregroundColor: Colors.black,
       elevation: 0,
-      centerTitle: false,
+      centerTitle: true,
     ),
 
     // Cards

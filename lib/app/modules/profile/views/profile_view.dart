@@ -11,7 +11,10 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile', style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'profile_title'.tr,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         centerTitle: true,
       ),
       body: Obx(() {
@@ -31,13 +34,13 @@ class ProfileView extends GetView<ProfileController> {
               AppSpacing.h24,
 
               // Account info
-              _sectionTitle('Account Information', context),
+              _sectionTitle('account_information'.tr, context),
               Card(
                 child: Column(
                   children: [
                     ListTile(
                       leading: const Icon(Icons.person_outline),
-                      title: const Text('Full Name'),
+                      title: Text('full_name'.tr),
                       subtitle: Text(
                         controller.userName.value,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -52,14 +55,14 @@ class ProfileView extends GetView<ProfileController> {
                     const Divider(height: 1),
                     _infoTile(
                       icon: Icons.email_outlined,
-                      title: 'Email',
+                      title: 'email'.tr,
                       value: controller.userEmail.value.toString(),
                       context: context,
                     ),
                     const Divider(height: 1),
                     _infoTile(
                       icon: Icons.badge_outlined,
-                      title: 'Role',
+                      title: 'role'.tr,
                       value: controller.userRole.value.toString(),
                       context: context,
                     ),
@@ -70,13 +73,13 @@ class ProfileView extends GetView<ProfileController> {
               AppSpacing.h16,
 
               // Actions
-              _sectionTitle('Actions', context),
+              _sectionTitle('actions'.tr, context),
               Card(
                 child: Column(
                   children: [
                     ListTile(
                       leading: const Icon(Icons.lock_outline),
-                      title: const Text('Change Password'),
+                      title: Text('change_password'.tr),
                       onTap: controller.changePassword,
                     ),
                   ],
@@ -87,7 +90,7 @@ class ProfileView extends GetView<ProfileController> {
 
               // Footer
               Text(
-                'Profile information is managed securely.',
+                'profile_secure_note'.tr,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),

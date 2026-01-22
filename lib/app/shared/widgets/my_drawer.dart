@@ -59,7 +59,8 @@ class _MyDrawerState extends State<MyDrawer> {
                             //         ),
                             //       ),
                             Obx(() {
-                              final imageUrl = profileController.profileImage.value;
+                              final imageUrl =
+                                  profileController.profileImage.value;
 
                               if (imageUrl != null && imageUrl.isNotEmpty) {
                                 return CircleAvatar(
@@ -103,21 +104,21 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
 
                       DrawerListTile(
-                        title: 'Home',
+                        title: 'home'.tr,
                         icon: Icons.home,
                         onTap: () {
                           Get.back();
                         },
                       ),
                       DrawerListTile(
-                        title: 'Profile',
+                        title: 'profile'.tr,
                         icon: Icons.person,
                         onTap: () {
                           Get.toNamed('/profile');
                         },
                       ),
                       DrawerListTile(
-                        title: 'Settings',
+                        title: 'settings'.tr,
                         icon: Icons.settings,
                         onTap: () {
                           Get.toNamed('/setting');
@@ -126,7 +127,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
                       MyDivider(),
                       DrawerListTile(
-                        title: "Request Account Deletion",
+                        title: "delete_account_title".tr,
                         icon: Icons.delete_forever,
                         isIconRed: true,
                         textStyle: TextStyle(
@@ -136,24 +137,31 @@ class _MyDrawerState extends State<MyDrawer> {
                           final confirm = await showDialog<bool>(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                              title: const Text('Delete Account'),
-                              content: const Text(
-                                'Are you sure you want to delete your account?\n\nTHIS ACTION CANNOT BE UNDONE. All your data will be deleted within 7 working days.',
+                              title: Text('delete_account_title'.tr),
+                              content: Column(
+                                children: [
+                                  Text('delete_account_confirm'.tr),
+                                  Text('\n\n'),
+                                  Text('delete_account_warning'.tr),
+                                ],
                               ),
+
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(ctx, false),
-                                  child: const Text('Cancel'),
+                                  child: Text('cancel'.tr),
                                 ),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.error,
-                                    foregroundColor:
-                                        Theme.of(context).colorScheme.onError,
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.error,
+                                    foregroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.onError,
                                   ),
                                   onPressed: () => Navigator.pop(ctx, true),
-                                  child: const Text('Delete'),
+                                  child: Text('confirm'),
                                 ),
                               ],
                             ),
@@ -170,21 +178,24 @@ class _MyDrawerState extends State<MyDrawer> {
                                     .collection('users')
                                     .doc(uid)
                                     .update({
-                                  'requestDel': true,
-                                  'requestDelApplyDate':
-                                      Timestamp.fromDate(applyDate),
-                                });
+                                      'requestDel': true,
+                                      'requestDelApplyDate': Timestamp.fromDate(
+                                        applyDate,
+                                      ),
+                                    });
 
                                 debugPrint(
-                                    '🗑️ Account deletion requested -> $uid at $applyDate');
+                                  '🗑️ Account deletion requested -> $uid at $applyDate',
+                                );
                               } catch (e) {
                                 debugPrint(
-                                    '❌ request deletion update error: $e');
+                                  '❌ request deletion update error: $e',
+                                );
                               }
                             }
 
                             Get.back();
-                            
+
                             Get.snackbar(
                               'Request Submitted',
                               'Your account deletion request has been received. Our team will process it within 7 working days.',
@@ -194,7 +205,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         },
                       ),
                       DrawerListTile(
-                        title: "Logout",
+                        title: "logout".tr,
                         icon: Icons.logout,
                         isIconRed: true,
                         textStyle: TextStyle(
@@ -260,7 +271,8 @@ class _MyDrawerState extends State<MyDrawer> {
                             //         ),
                             //       ),
                             Obx(() {
-                              final imageUrl = profileController.profileImage.value;
+                              final imageUrl =
+                                  profileController.profileImage.value;
 
                               if (imageUrl != null && imageUrl.isNotEmpty) {
                                 return CircleAvatar(
@@ -391,7 +403,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
                 // Footer
                 Text(
-                  'ItsTyne Consult © 2026',
+                  'copyright'.tr,
                   style: Theme.of(
                     context,
                   ).textTheme.bodySmall?.copyWith(color: Colors.grey),
