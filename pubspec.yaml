@@ -39,6 +39,8 @@ flutter:
   assets:
     - assets/logos/logo.png
     - assets/icon/icon.png
+    - assets/splash.png
+    - assets/itstyne-logo.png
 
 # App luncher icon configuration
 flutter_launcher_icons:

@@ -7,6 +7,7 @@ class SettingController extends GetxController {
   static const String _themeKey = 'is_dark_mode';
 
   final GetStorage _box = GetStorage();
+
   /// Theme state
   final RxBool isDarkMode = false.obs;
 
@@ -25,9 +26,7 @@ class SettingController extends GetxController {
       isDarkMode.value = savedTheme;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.changeThemeMode(
-          savedTheme ? ThemeMode.dark : ThemeMode.light,
-        );
+        Get.changeThemeMode(savedTheme ? ThemeMode.dark : ThemeMode.light);
       });
     }
   }
@@ -67,18 +66,20 @@ class SettingController extends GetxController {
   /// Open About page
   void openAbout() {
     // TODO: Implement about page navigation
-    // Get.toNamed('/about');
+    Get.toNamed('/about');
   }
 
   /// Open Privacy Policy
   void openPrivacyPolicy() {
     // TODO: Open privacy policy URL
     // launchUrl(Uri.parse('https://itstyne.com/privacy-policy'));
+    Get.toNamed('/privacy-policy');
   }
 
   /// Open Terms & Conditions
   void openTerms() {
     // TODO: Open terms URL
     // launchUrl(Uri.parse('https://itstyne.com/terms'));
+    Get.toNamed('/terms-and-conditions');
   }
 }

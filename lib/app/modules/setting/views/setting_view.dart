@@ -69,27 +69,27 @@ class SettingView extends GetView<SettingController> {
 
           AppSpacing.h16,
 
-          // Account
-          _sectionTitle(context, 'Account'),
-          Card(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.person_outline),
-                  title: const Text('Profile'),
-                  onTap: controller.goToProfile,
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Logout'),
-                  onTap: controller.logout,
-                ),
-              ],
-            ),
-          ),
+          // // Account
+          // _sectionTitle(context, 'Account'),
+          // Card(
+          //   child: Column(
+          //     children: [
+          //       ListTile(
+          //         leading: const Icon(Icons.person_outline),
+          //         title: const Text('Profile'),
+          //         onTap: controller.goToProfile,
+          //       ),
+          //       const Divider(height: 1),
+          //       ListTile(
+          //         leading: const Icon(Icons.logout),
+          //         title: const Text('Logout'),
+          //         onTap: controller.logout,
+          //       ),
+          //     ],
+          //   ),
+          // ),
 
-          AppSpacing.h16,
+          // AppSpacing.h16,
 
           // About
           _sectionTitle(context, 'About'),

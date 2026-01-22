@@ -24,6 +24,7 @@ abstract class Routes {
       _Paths.SUPERADMIN_LIST_NOTIFICATIONS;
   static const CREATE_FCM = _Paths.CREATE_FCM;
   static const ADMIN_LIST_SESSIONS = _Paths.ADMIN_LIST_SESSIONS;
+  static const ABOUT = _Paths.ABOUT;
 }
 
 abstract class _Paths {
@@ -48,4 +49,5 @@ abstract class _Paths {
   static const SUPERADMIN_LIST_NOTIFICATIONS = '/superadmin-list-notifications';
   static const CREATE_FCM = '/create-fcm';
   static const ADMIN_LIST_SESSIONS = '/admin-list-sessions';
+  static const ABOUT = '/about';
 }

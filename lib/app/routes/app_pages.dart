@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/about/bindings/about_binding.dart';
+import '../modules/about/views/about_view.dart';
 import '../modules/admin-list-sessions/bindings/admin_list_sessions_binding.dart';
 import '../modules/admin-list-sessions/views/admin_list_sessions_view.dart';
 import '../modules/auth-gate/bindings/auth_gate_binding.dart';
@@ -148,6 +150,11 @@ class AppPages {
       name: _Paths.ADMIN_LIST_SESSIONS,
       page: () => const AdminListSessionsView(),
       binding: AdminListSessionsBinding(),
+    ),
+    GetPage(
+      name: _Paths.ABOUT,
+      page: () => const AboutView(),
+      binding: AboutBinding(),
     ),
   ];
 }
