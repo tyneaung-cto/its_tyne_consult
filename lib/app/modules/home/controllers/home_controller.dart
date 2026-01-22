@@ -10,8 +10,9 @@ class HomeController extends GetxController {
   // 🔹 Dashboard counters (auto update via Firestore stream)
   // ======================================================
 
-final bookingsCount = 0.obs;
-final sessionsCount = 0.obs;
+  final bookingsCount = 0.obs;
+  final sessionsCount = 0.obs;
+  final notificationsUnreadCount = 0.obs;
 
   // 🔹 Upcoming sessions (max 5, today → future only)
   final upcomingSessions = <Map<String, dynamic>>[].obs;
@@ -19,6 +20,7 @@ final sessionsCount = 0.obs;
 
   StreamSubscription? _bookingSub;
   StreamSubscription? _sessionSub;
+  StreamSubscription? _notificationSub;
 
   void _listenCounts() {
     final uid = AuthService().getCurrentUser()?.uid;
@@ -81,6 +83,30 @@ final sessionsCount = 0.obs;
           },
         );
 
+    /// 🔴 Notifications unread count
+    _notificationSub = FirebaseFirestore.instance
+        .collection('notifications')
+        .where('userId', isEqualTo: uid)
+        .where('isRead', isEqualTo: false)
+        .snapshots()
+        .listen(
+          (snap) {
+            debugPrint('🔥 notifications snapshot received');
+            debugPrint('📄 unread notifications count = ${snap.docs.length}');
+            for (final d in snap.docs) {
+              debugPrint('   • notificationId=${d.id} data=${d.data()}');
+            }
+
+            notificationsUnreadCount.value = snap.docs.length;
+            debugPrint(
+              '📊 notificationsUnreadCount updated -> ${notificationsUnreadCount.value}',
+            );
+          },
+          onError: (e) {
+            debugPrint('❌ notifications listener error: $e');
+          },
+        );
+
     // 🟣 Upcoming sessions (today → future, max 5)
     final now = DateTime.now();
 
@@ -92,27 +118,29 @@ final sessionsCount = 0.obs;
         .limit(5)
         .snapshots()
         .listen(
-      (snap) {
-        debugPrint('🔥 upcoming sessions snapshot received');
-        debugPrint('📄 upcoming docs count = ${snap.docs.length}');
+          (snap) {
+            debugPrint('🔥 upcoming sessions snapshot received');
+            debugPrint('📄 upcoming docs count = ${snap.docs.length}');
 
-        for (final d in snap.docs) {
-          debugPrint('   • upcomingId=${d.id} data=${d.data()}');
-        }
+            for (final d in snap.docs) {
+              debugPrint('   • upcomingId=${d.id} data=${d.data()}');
+            }
 
-        final mapped = snap.docs.map((d) {
-          final data = d.data() as Map<String, dynamic>;
-          data['id'] = d.id; // keep doc id for UI
-          return data;
-        }).toList();
+            final mapped = snap.docs.map((d) {
+              final data = d.data() as Map<String, dynamic>;
+              data['id'] = d.id; // keep doc id for UI
+              return data;
+            }).toList();
 
-        upcomingSessions.assignAll(mapped);
-        debugPrint('📊 upcomingSessions updated -> ${upcomingSessions.length}');
-      },
-      onError: (e) {
-        debugPrint('❌ upcoming sessions listener error: $e');
-      },
-    );
+            upcomingSessions.assignAll(mapped);
+            debugPrint(
+              '📊 upcomingSessions updated -> ${upcomingSessions.length}',
+            );
+          },
+          onError: (e) {
+            debugPrint('❌ upcoming sessions listener error: $e');
+          },
+        );
   }
 
   /// Navigate to booking page
@@ -140,6 +168,7 @@ final sessionsCount = 0.obs;
   void onClose() {
     _bookingSub?.cancel();
     _sessionSub?.cancel();
+    _notificationSub?.cancel();
     _upcomingSub?.cancel();
     super.onClose();
   }
