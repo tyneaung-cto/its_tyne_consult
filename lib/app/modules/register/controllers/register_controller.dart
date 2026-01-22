@@ -15,6 +15,7 @@ class RegisterController extends GetxController {
 
   // Terms & conditions checkbox
   final RxBool isAgreeTerms = false.obs;
+  final RxBool isLoading = false.obs;
 
   @override
   void onClose() {
@@ -65,6 +66,7 @@ class RegisterController extends GetxController {
     }
 
     try {
+      isLoading.value = true;
       final user = await _authService.registerWithEmailAndPassword(
         email,
         password,
@@ -103,10 +105,11 @@ class RegisterController extends GetxController {
     } catch (e) {
       Get.snackbar(
         'Error',
-        // 'Something went wrong. Please try again later.',
         '${e.toString()}',
         snackPosition: SnackPosition.BOTTOM,
       );
+    } finally {
+      isLoading.value = false;
     }
   }
 

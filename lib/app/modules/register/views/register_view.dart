@@ -78,9 +78,9 @@ class RegisterView extends GetView<RegisterController> {
                       TextSpan(
                         text: 'Terms & Conditions',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = controller.goToTermsAndConditions,
                       ),
@@ -101,7 +101,28 @@ class RegisterView extends GetView<RegisterController> {
 
             AppSpacing.h24,
 
-            MyButton(text: 'Register', onPressed: controller.register),
+            // MyButton(text: 'Register', onPressed: controller.register),
+            Obx(
+              () => SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  child: ElevatedButton(
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.register,
+                    child: controller.isLoading.value
+                        ? const SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Register'),
+                  ),
+                ),
+              ),
+            ),
 
             AppSpacing.h24,
 

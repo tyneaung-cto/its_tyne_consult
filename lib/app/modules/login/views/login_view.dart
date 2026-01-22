@@ -68,13 +68,34 @@ class LoginView extends GetView<LoginController> {
               AppSpacing.h24,
 
               // login button
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SizedBox(
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 16),
+              //   child: SizedBox(
+              //     width: double.infinity,
+              //     child: MyButton(
+              //       text: 'Login',
+              //       onPressed: controller.loginWithEmailAndPassword,
+              //     ),
+              //   ),
+              // ),
+              Obx(
+                () => SizedBox(
                   width: double.infinity,
-                  child: MyButton(
-                    text: 'Login',
-                    onPressed: controller.loginWithEmailAndPassword,
+                  height: 52,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                    child: ElevatedButton(
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : controller.loginWithEmailAndPassword,
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                              height: 22,
+                              width: 22,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Text('Login'),
+                    ),
                   ),
                 ),
               ),

@@ -27,19 +27,43 @@ class LoginController extends GetxController {
   }
 
   Future<void> loginWithEmailAndPassword() async {
-    isLoading.value = true;
-    email.value = emailController.text;
-    password.value = passwordController.text;
-    final user =
-        await _authService.signInWithEmailAndPassword(email.value.trim(), password.value.trim());
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
 
-    if (user == null) {
+      email.value = emailController.text.trim();
+      password.value = passwordController.text.trim();
+
+      if (email.value.isEmpty || password.value.isEmpty) {
+        Get.snackbar(
+          'Missing Info',
+          'Please enter email and password',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return;
+      }
+
+      final user = await _authService.signInWithEmailAndPassword(
+        email.value,
+        password.value,
+      );
+
+      if (user == null) {
+        Get.snackbar(
+          'Login Failed',
+          'Invalid email or password',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+      // Success handled by AuthGateController
+    } catch (e) {
       Get.snackbar(
-        'Login Failed',
-        'Invalid email or password',
+        'Error',
+        e.toString(),
         snackPosition: SnackPosition.BOTTOM,
       );
+    } finally {
+      isLoading.value = false;
     }
-    // Success case is handled automatically by AuthGateController
   }
 }
