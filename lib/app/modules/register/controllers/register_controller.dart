@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/services/auth_service.dart';
+import '../../../core/services/fcm_service.dart';
 
 class RegisterController extends GetxController {
   final AuthService _authService = AuthService();
@@ -76,6 +77,20 @@ class RegisterController extends GetxController {
           'Your account has been created successfully.',
           snackPosition: SnackPosition.BOTTOM,
         );
+
+        // 🔔 Subscribe + show welcome notification locally
+        try {
+          // subscribe to default topics (ex: all + role later in AuthGate)
+          await FcmService.subscribeTopics('client');
+
+          // show instant foreground welcome notification/snackbar
+          await FcmService.showLocalWelcomeNotification(
+            title: 'Welcome 🎉',
+            body: 'Hi $userName, welcome to It\'s Tyne Consult!',
+          );
+        } catch (e) {
+          debugPrint('❌ Welcome FCM error: $e');
+        }
 
         // AuthGate will handle navigation
       } else {

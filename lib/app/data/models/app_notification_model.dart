@@ -7,6 +7,7 @@ class AppNotification {
   final String message;
   final bool isRead;
   final DateTime createdAt;
+  final String? createdBy;
 
   AppNotification({
     required this.id,
@@ -15,10 +16,12 @@ class AppNotification {
     required this.message,
     required this.isRead,
     required this.createdAt,
+    this.createdBy,
   });
 
   factory AppNotification.fromDoc(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
+    final Timestamp? createdAtTs = data['createdAt'];
 
     return AppNotification(
       id: doc.id,
@@ -26,7 +29,8 @@ class AppNotification {
       title: data['title'],
       message: data['message'],
       isRead: data['isRead'] ?? false,
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      createdAt: createdAtTs != null ? createdAtTs.toDate() : DateTime.now(),
+      createdBy: data['createdBy'],
     );
   }
 
@@ -37,6 +41,7 @@ class AppNotification {
       'message': message,
       'isRead': isRead,
       'createdAt': Timestamp.fromDate(createdAt),
+      'createdBy': createdBy,
     };
   }
 }

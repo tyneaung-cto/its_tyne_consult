@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AppUser {
   final String uid;
   final String username;
@@ -30,5 +32,10 @@ class AppUser {
       profileImage: data['profile_image'] ?? '',
       createdAt: data['createdAt']?.toDate() ?? DateTime.now(),
     );
+  }
+
+  factory AppUser.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final data = doc.data()!;
+    return AppUser.fromMap(doc.id, data);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:its_tyne_consult/app/data/models/notification_model.dart';
+import 'package:its_tyne_consult/app/data/models/app_notification_model.dart';
 
 import '../../../core/services/firestore_service.dart';
 

@@ -2,10 +2,14 @@ import 'package:get/get.dart';
 
 import '../modules/auth-gate/bindings/auth_gate_binding.dart';
 import '../modules/auth-gate/views/auth_gate_view.dart';
+import '../modules/banned-home/bindings/banned_home_binding.dart';
+import '../modules/banned-home/views/banned_home_view.dart';
 import '../modules/booking-list/bindings/booking_list_binding.dart';
 import '../modules/booking-list/views/booking_list_view.dart';
 import '../modules/booking/bindings/booking_binding.dart';
 import '../modules/booking/views/booking_view.dart';
+import '../modules/create-fcm/bindings/create_fcm_binding.dart';
+import '../modules/create-fcm/views/create_fcm_view.dart';
 import '../modules/forget-password/bindings/forget_password_binding.dart';
 import '../modules/forget-password/views/forget_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -24,6 +28,14 @@ import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
 import '../modules/setting/views/setting_view.dart';
+import '../modules/superadmin-home/bindings/superadmin_home_binding.dart';
+import '../modules/superadmin-home/views/superadmin_home_view.dart';
+import '../modules/superadmin-list-notifications/bindings/superadmin_list_notifications_binding.dart';
+import '../modules/superadmin-list-notifications/views/superadmin_list_notifications_view.dart';
+import '../modules/superadmin-system-settings/bindings/superadmin_system_settings_binding.dart';
+import '../modules/superadmin-system-settings/views/superadmin_system_settings_view.dart';
+import '../modules/superadmin-user-management/bindings/superadmin_user_management_binding.dart';
+import '../modules/superadmin-user-management/views/superadmin_user_management_view.dart';
 import '../modules/terms-and-conditions/bindings/terms_and_conditions_binding.dart';
 import '../modules/terms-and-conditions/views/terms_and_conditions_view.dart';
 
@@ -99,6 +111,36 @@ class AppPages {
       name: _Paths.BOOKING_LIST,
       page: () => const BookingListView(),
       binding: BookingListBinding(),
+    ),
+    GetPage(
+      name: _Paths.BANNED_HOME,
+      page: () => const BannedHomeView(),
+      binding: BannedHomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUPERADMIN_HOME,
+      page: () => const SuperadminHomeView(),
+      binding: SuperadminHomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUPERADMIN_USER_MANAGEMENT,
+      page: () => const SuperadminUserManagementView(),
+      binding: SuperadminUserManagementBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUPERADMIN_SYSTEM_SETTINGS,
+      page: () => const SuperadminSystemSettingsView(),
+      binding: SuperadminSystemSettingsBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUPERADMIN_LIST_NOTIFICATIONS,
+      page: () => const SuperadminListNotificationsView(),
+      binding: SuperadminListNotificationsBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREATE_FCM,
+      page: () => const CreateFcmView(),
+      binding: CreateFcmBinding(),
     ),
   ];
 }
