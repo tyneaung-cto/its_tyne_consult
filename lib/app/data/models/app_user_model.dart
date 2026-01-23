@@ -7,7 +7,6 @@ class AppUser {
   final String role;
   final bool isActive;
   final bool isBanned;
-  final String profileImage;
   final DateTime createdAt;
   final bool requestDel;
   final DateTime? requestDelApplyDate;
@@ -19,7 +18,6 @@ class AppUser {
     required this.role,
     required this.isActive,
     required this.isBanned,
-    required this.profileImage,
     required this.createdAt,
     required this.requestDel,
     this.requestDelApplyDate,
@@ -33,7 +31,6 @@ class AppUser {
       role: data['role'] ?? 'client',
       isActive: data['isActive'] ?? true,
       isBanned: data['isBanned'] ?? false,
-      profileImage: data['profile_image'] ?? '',
       createdAt: data['createdAt']?.toDate() ?? DateTime.now(),
       requestDel: data['requestDel'] ?? false,
       requestDelApplyDate: data['requestDelApplyDate'] != null

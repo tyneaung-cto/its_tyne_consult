@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:its_tyne_consult/app/core/values/app_spacing.dart';
-import 'package:its_tyne_consult/app/shared/widgets/my_button.dart';
 import 'package:its_tyne_consult/app/shared/widgets/my_text_field.dart';
 
 import '../controllers/login_controller.dart';
@@ -19,18 +18,18 @@ class LoginView extends GetView<LoginController> {
             children: [
               // add icon
               Image.asset(
-                'assets/icon/icon.png',
-                height: 80,
+                'assets/itstyne-logo.png',
+                height: 120,
                 fit: BoxFit.contain,
               ),
-              AppSpacing.h16,
+              AppSpacing.h12,
 
               // welcome text
               Text(
                 'Welcome Back!',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              AppSpacing.h16,
+              AppSpacing.h32,
 
               // email textfield
               MyTextField(
@@ -67,17 +66,6 @@ class LoginView extends GetView<LoginController> {
               ),
               AppSpacing.h24,
 
-              // login button
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 16),
-              //   child: SizedBox(
-              //     width: double.infinity,
-              //     child: MyButton(
-              //       text: 'Login',
-              //       onPressed: controller.loginWithEmailAndPassword,
-              //     ),
-              //   ),
-              // ),
               Obx(
                 () => SizedBox(
                   width: double.infinity,

@@ -97,10 +97,6 @@ class RequestDelHomeView extends GetView<RequestDelHomeController> {
 
               // Current user info
               Obx(() {
-                if (controller.email.value == null &&
-                    controller.username.value == null)
-                  return const SizedBox();
-
                 return Card(
                   child: ListTile(
                     leading: CircleAvatar(

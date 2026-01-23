@@ -18,7 +18,6 @@ class AuthService {
       );
       return result.user;
     } catch (e) {
-      print('Error in signInWithEmailAndPassword: $e');
       return null;
     }
   }
@@ -53,7 +52,6 @@ class AuthService {
       await _auth.currentUser?.delete();
       debugPrint('❌ Register failed: $e');
       debugPrint('STACKTRACE: $s');
-      print('Register failed: $e');
       return null;
     }
   }

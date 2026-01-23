@@ -26,9 +26,6 @@ class ProfileView extends GetView<ProfileController> {
               _ProfileHeader(
                 name: controller.userName.value,
                 email: controller.userEmail.value,
-                profileImageUrl: controller.profileImage.value,
-                hasProfileImage: controller.hasProfileImage,
-                onEditImage: controller.changeProfileImage,
               ),
 
               AppSpacing.h24,
@@ -140,17 +137,8 @@ class ProfileView extends GetView<ProfileController> {
 class _ProfileHeader extends StatelessWidget {
   final String name;
   final String email;
-  final String? profileImageUrl;
-  final bool hasProfileImage;
-  final VoidCallback onEditImage;
 
-  const _ProfileHeader({
-    required this.name,
-    required this.email,
-    required this.profileImageUrl,
-    required this.hasProfileImage,
-    required this.onEditImage,
-  });
+  const _ProfileHeader({required this.name, required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -159,29 +147,15 @@ class _ProfileHeader extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 42,
-          backgroundImage: hasProfileImage
-              ? NetworkImage(profileImageUrl!)
-              : null,
-          child: hasProfileImage
-              ? null
-              : Text(
-                  name.isNotEmpty ? name[0].toUpperCase() : '?',
-                  style: const TextStyle(fontSize: 32),
-                ),
-        ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: InkWell(
-            onTap: onEditImage,
-            child: CircleAvatar(
-              radius: 14,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: const Icon(
-                Icons.camera_alt_outlined,
-                size: 14,
-                color: Colors.white,
-              ),
+          backgroundColor: Theme.of(context).colorScheme.primary.withAlpha(38),
+          child: Text(
+            name.trim().isNotEmpty
+                ? name.trim()[0].toUpperCase()
+                : (email.isNotEmpty ? email[0].toUpperCase() : '?'),
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),

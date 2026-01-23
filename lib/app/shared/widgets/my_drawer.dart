@@ -58,38 +58,63 @@ class _MyDrawerState extends State<MyDrawer> {
                             //           color: Theme.of(context).colorScheme.onPrimary,
                             //         ),
                             //       ),
-                            Obx(() {
-                              final imageUrl =
-                                  profileController.profileImage.value;
+                            // Obx(() {
+                            //   final imageUrl =
+                            //       profileController.profileImage.value;
 
-                              if (imageUrl != null && imageUrl.isNotEmpty) {
-                                return CircleAvatar(
-                                  radius: 40,
-                                  backgroundImage: NetworkImage(imageUrl),
-                                  backgroundColor: Colors.transparent,
-                                );
-                              }
+                            //   if (imageUrl != null && imageUrl.isNotEmpty) {
+                            //     return CircleAvatar(
+                            //       radius: 40,
+                            //       backgroundImage: NetworkImage(imageUrl),
+                            //       backgroundColor: Colors.transparent,
+                            //     );
+                            //   }
+
+                            //   return CircleAvatar(
+                            //     radius: 40,
+                            //     backgroundColor: Theme.of(context)
+                            //         .colorScheme
+                            //         .onPrimary
+                            //         .withValues(
+                            //           alpha: 0.2,
+                            //         ), // replaces withOpacity
+                            //     child: Icon(
+                            //       Icons.person,
+                            //       size: 48,
+                            //       color: Theme.of(
+                            //         context,
+                            //       ).colorScheme.onPrimary,
+                            //     ),
+                            //   );
+                            // }),
+                            Obx(() {
+                              // ProfileController exposes userName (RxString), not user object
+                              final name =
+                                  profileController.userName.value.isNotEmpty
+                                  ? profileController.userName.value
+                                  : (AuthService().getCurrentEmail());
+
+                              final firstChar = name.trim().isNotEmpty
+                                  ? name.trim()[0].toUpperCase()
+                                  : 'U';
 
                               return CircleAvatar(
-                                radius: 40,
-                                backgroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary
-                                    .withValues(
-                                      alpha: 0.2,
-                                    ), // replaces withOpacity
-                                child: Icon(
-                                  Icons.person,
-                                  size: 48,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
+                                radius: 28,
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.onPrimary.withValues(alpha: 0.2),
+                                child: Text(
+                                  firstChar,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               );
                             }),
                             AppSpacing.h12,
                             Text(
-                              AuthService().getCurrentEmail() ?? '',
+                              AuthService().getCurrentEmail(),
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
@@ -271,38 +296,35 @@ class _MyDrawerState extends State<MyDrawer> {
                             //         ),
                             //       ),
                             Obx(() {
-                              final imageUrl =
-                                  profileController.profileImage.value;
+                              // ProfileController no longer exposes profileImage.
+                              // Use username initial instead (Google Play policy safe, no storage permission).
+                              final name =
+                                  profileController.userName.value.isNotEmpty
+                                  ? profileController.userName.value
+                                  : (AuthService().getCurrentEmail());
 
-                              if (imageUrl != null && imageUrl.isNotEmpty) {
-                                return CircleAvatar(
-                                  radius: 40,
-                                  backgroundImage: NetworkImage(imageUrl),
-                                  backgroundColor: Colors.transparent,
-                                );
-                              }
+                              final firstChar = name.trim().isNotEmpty
+                                  ? name.trim()[0].toUpperCase()
+                                  : 'U';
 
                               return CircleAvatar(
                                 radius: 40,
-                                backgroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary
-                                    .withValues(
-                                      alpha: 0.2,
-                                    ), // replaces withOpacity
-                                child: Icon(
-                                  Icons.person,
-                                  size: 48,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.onPrimary.withValues(alpha: 0.2),
+                                child: Text(
+                                  firstChar,
+                                  style: const TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               );
                             }),
                             AppSpacing.h12,
 
                             Text(
-                              AuthService().getCurrentEmail() ?? '',
+                              AuthService().getCurrentEmail(),
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(

@@ -3,9 +3,6 @@ import 'package:get/get.dart';
 import 'package:its_tyne_consult/app/core/services/firestore_service.dart';
 import 'package:its_tyne_consult/app/data/models/app_user_model.dart';
 import '../../../core/services/auth_service.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class ProfileController extends GetxController {
   /// Services
@@ -15,12 +12,9 @@ class ProfileController extends GetxController {
   final RxString userName = ''.obs;
   final RxString userEmail = ''.obs;
   final RxString userRole = ''.obs;
-  final RxnString profileImage = RxnString();
   final RxBool isUpdatingName = false.obs;
-  final RxBool isUpdatingImage = false.obs;
 
-  bool get hasProfileImage =>
-      profileImage.value != null && profileImage.value!.isNotEmpty;
+
 
   /// Show dialog to edit user's full name
   void editUserNameDialog() {
@@ -99,13 +93,7 @@ class ProfileController extends GetxController {
       userName.value = user.username;
       userEmail.value = user.email;
       userRole.value = user.role;
-      if (user.profileImage.isNotEmpty) {
-        profileImage.value = user.profileImage;
-        debugPrint('🟢 Profile: profile image set -> ${profileImage.value}');
-      } else {
-        profileImage.value = null;
-        debugPrint('⚠️ Profile: no profile image found');
-      }
+      
 
       debugPrint(
         '✅ Profile loaded & assigned: '
@@ -153,71 +141,6 @@ class ProfileController extends GetxController {
     } finally {
       isUpdatingName.value = false;
     }
-  }
-
-  Future<void> pickAndUploadProfileImage() async {
-    try {
-      isUpdatingImage.value = true;
-      debugPrint('🟡 Profile: pick image start');
-
-      final currentUser = _authService.getCurrentUser();
-      if (currentUser == null) {
-        debugPrint('❌ Profile: no auth user');
-        return;
-      }
-
-      final picker = ImagePicker();
-      final pickedFile = await picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-      );
-
-      if (pickedFile == null) {
-        debugPrint('⚠️ Profile: image picking cancelled');
-        return;
-      }
-
-      final file = File(pickedFile.path);
-      final ref = FirebaseStorage.instance.ref().child(
-        'profile_images/${currentUser.uid}.jpg',
-      );
-
-      debugPrint('🟡 Profile: uploading image...');
-      await ref.putFile(file);
-
-      final downloadUrl = await ref.getDownloadURL();
-      debugPrint('🟢 Profile: image uploaded -> $downloadUrl');
-
-      await FirestoreService.instance.updateUser(
-        uid: currentUser.uid,
-        data: {'profile_image': downloadUrl},
-      );
-
-      profileImage.value = downloadUrl;
-      debugPrint('✅ Profile: profileImage observable updated');
-
-      Get.snackbar('Success', 'Profile image updated');
-    } catch (e, s) {
-      debugPrint('❌ Profile: image upload error: $e');
-      debugPrint('STACKTRACE: $s');
-      Get.snackbar('Error', 'Failed to update profile image');
-    } finally {
-      isUpdatingImage.value = false;
-    }
-  }
-
-  /// Entry point from UI to change profile image
-  /// (camera icon / edit avatar tap)
-  Future<void> changeProfileImage() async {
-    debugPrint('🟡 Profile: changeProfileImage triggered');
-
-    // Prevent duplicate taps
-    if (isUpdatingImage.value) {
-      debugPrint('⚠️ Profile: image update already in progress');
-      return;
-    }
-
-    await pickAndUploadProfileImage();
   }
 
   /// Trigger change password flow

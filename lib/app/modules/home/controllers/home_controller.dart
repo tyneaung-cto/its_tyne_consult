@@ -42,7 +42,7 @@ class HomeController extends GetxController {
             int count = 0;
 
             for (final d in snap.docs) {
-              final data = d.data() as Map<String, dynamic>;
+              final data = d.data();
 
               // Some docs use userId, some userID (common bug)
               final docUid = data['userId'] ?? data['userID'];
@@ -127,7 +127,7 @@ class HomeController extends GetxController {
             }
 
             final mapped = snap.docs.map((d) {
-              final data = d.data() as Map<String, dynamic>;
+              final data = d.data();
               data['id'] = d.id; // keep doc id for UI
               return data;
             }).toList();

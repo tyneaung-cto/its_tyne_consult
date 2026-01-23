@@ -322,38 +322,38 @@ class _QuickActionCard extends StatelessWidget {
   }
 }
 
-class _InfoCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
+// class _InfoCard extends StatelessWidget {
+//   final IconData icon;
+//   final String title;
+//   final String subtitle;
 
-  const _InfoCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
+//   const _InfoCard({
+//     required this.icon,
+//     required this.title,
+//     required this.subtitle,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Icon(icon, size: 28),
-            AppSpacing.h12,
-            Text(title, style: Theme.of(context).textTheme.titleSmall),
-            AppSpacing.h4,
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       child: Padding(
+//         padding: const EdgeInsets.all(16),
+//         child: Column(
+//           children: [
+//             Icon(icon, size: 28),
+//             AppSpacing.h12,
+//             Text(title, style: Theme.of(context).textTheme.titleSmall),
+//             AppSpacing.h4,
+//             Text(
+//               subtitle,
+//               textAlign: TextAlign.center,
+//               style: Theme.of(context).textTheme.bodySmall?.copyWith(
+//                 color: Theme.of(context).colorScheme.onSurfaceVariant,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

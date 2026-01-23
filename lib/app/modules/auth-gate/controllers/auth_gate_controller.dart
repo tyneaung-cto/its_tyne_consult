@@ -8,7 +8,6 @@ import 'package:its_tyne_consult/app/core/services/fcm_service.dart';
 import 'package:its_tyne_consult/app/routes/app_pages.dart';
 
 class AuthGateController extends GetxController {
-  final AuthService _authService = AuthService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   StreamSubscription<User?>? _authSubscription;

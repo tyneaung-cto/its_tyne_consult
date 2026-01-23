@@ -209,7 +209,7 @@ class BookingController extends GetxController {
         'Your consultation request has been sent successfully.',
         snackPosition: SnackPosition.BOTTOM,
         duration: const Duration(seconds: 2),
-        backgroundColor: Colors.green.shade600,
+        backgroundColor: Get.theme.colorScheme.primary,
         colorText: Colors.white,
       );
 
@@ -220,9 +220,9 @@ class BookingController extends GetxController {
       selectedTimeSlot.value = null;
       selectedDuration.value = 30;
 
-      // ✅ WAIT before navigating back
-      await Future.delayed(const Duration(milliseconds: 1500));
-      Get.back();
+      // ✅ Navigate to home after success
+      await Future.delayed(const Duration(milliseconds: 900));
+      Get.offAllNamed('/home');
     } catch (e) {
       debugPrint('❌ Booking error: $e');
 

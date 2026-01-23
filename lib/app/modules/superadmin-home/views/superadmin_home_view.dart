@@ -86,7 +86,6 @@ class SuperadminHomeView extends GetView<SuperadminHomeController> {
                     itemBuilder: (context, index) {
                       final data = docs[index].data() as Map<String, dynamic>;
 
-                      final consultationId = data['consultationId'];
                       final userId = data['userId'];
                       final duration = data['duration'] ?? 0;
                       final meetingLink = data['meetingLink'] ?? '';
@@ -111,7 +110,6 @@ class SuperadminHomeView extends GetView<SuperadminHomeController> {
                               userSnap.data?.data() as Map<String, dynamic>? ??
                               {};
 
-                          final userName = userData['userName'] ?? 'Client';
                           final email = userData['email'] ?? '-';
 
                           final hasLink = meetingLink.isNotEmpty;

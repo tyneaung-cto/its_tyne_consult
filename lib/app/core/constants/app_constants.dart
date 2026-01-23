@@ -6,7 +6,7 @@ class AppConstants {
   // ======================
   static const String appName = 'ItsTyne Consult';
   static const String companyName = 'TECH4MM';
-  static const String appVersion = '[ 1.0.2+2 ]';
+  static const String appVersion = '[ 1.0.3+3 ]';
 
   // ======================
   // Legal

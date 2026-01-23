@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 
-import '../../../shared/widgets/my_button.dart';
 import '../../../shared/widgets/my_text_field.dart';
 import '../../../core/values/app_spacing.dart';
 import '../controllers/register_controller.dart';

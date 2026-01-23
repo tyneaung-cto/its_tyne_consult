@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:its_tyne_consult/app/core/services/fcm_service.dart';
+import 'package:its_tyne_consult/app/core/services/network_service.dart';
 import 'package:its_tyne_consult/app/core/theme/app_theme.dart';
 import 'package:its_tyne_consult/app/core/translations/app_translations.dart';
 import 'package:its_tyne_consult/app/modules/auth-gate/bindings/auth_gate_binding.dart';
@@ -24,8 +25,11 @@ void main() async {
       ? ThemeMode.dark
       : ThemeMode.light;
 
+  await Get.putAsync(() async => NetworkService());
+
   runApp(
     GetMaterialApp(
+
       title: "ItsTyne Consult",
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
